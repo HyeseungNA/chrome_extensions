@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "Timer",
+  "version": "1.0",
+  "description": "Timer for algorithm",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": "timer.png"
+  },
+  "host_permissions": ["https://*.www.acmicpc.net/"],
+  "permissions": ["activeTab"]
+}
