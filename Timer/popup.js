@@ -1,41 +1,44 @@
 document.addEventListener("DOMContentLoaded", function () {
   const startButton = document.getElementById("startButton");
+  const resetButton = document.getElementById("resetButton");
   const hoursInput = document.getElementById("hoursInput");
   const minutesInput = document.getElementById("minutesInput");
   const secondsInput = document.getElementById("secondsInput");
-  let timerInterval;
 
-  const padNumber = (number) => {
-    return number < 10 ? "0" + number : number;
-  };
+  // background파일에 데이터 보내기
   startButton.addEventListener("click", function () {
     if (startButton.innerText === "재생") {
       startButton.innerText = "일시정지";
-      timerInterval = setInterval(() => {
-        if (parseInt(secondsInput.value) > 0) {
-          // 초가 0보다 크면 1초씩 줄어들기
-          secondsInput.value = padNumber(parseInt(secondsInput.value) - 1);
-        } else {
-          secondsInput.value = 59; // 0이면 59초로 내려주기
-          if (parseInt(minutesInput.value) > 0) {
-            minutesInput.value = padNumber(parseInt(minutesInput.value) - 1);
-          } else {
-            minutesInput.value = 59;
-            if (parseInt(hoursInput.value) > 0) {
-              hoursInput.value = padNumber(parseInt(hoursInput.value) - 1);
-            } else {
-              clearInterval(timerInterval);
-              startButton.innerText = "재생";
-              alert("타이머가 종료되었습니다!");
-              hoursInput.value = "00";
-              minutesInput.value = "00";
-              secondsInput.value = "00";
-            }
-          }
-        }
-      }, 1000);
+      chrome.runtime.sendMessage({
+        type: "updateTimer",
+        payload: {
+          hours: hoursInput.value,
+          minutes: minutesInput.value,
+          seconds: secondsInput.value,
+        },
+      });
     } else {
       startButton.innerText = "재생";
     }
   });
+
+  resetButton.addEventListener("click", function () {
+    startButton.innerText = "재생";
+    hoursInput.value = "00";
+    minutesInput.value = "00";
+    secondsInput.value = "00";
+  });
+
+  // background.js에서 받은 타이머 값을 화면에 업데이트
+  // chrome.runtime.onMessage.addListener(function (
+  //   request,
+  //   sender,
+  //   sendResponse
+  // ) {
+  //   if (request.action === "updateTimerValues") {
+  //     hoursInput.value = request.hours;
+  //     minutesInput.value = request.minutes;
+  //     secondsInput.value = request.seconds;
+  //   }
+  // });
 });

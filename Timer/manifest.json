@@ -8,5 +8,9 @@
     "default_icon": "timer.png"
   },
   "host_permissions": ["https://*.www.acmicpc.net/"],
-  "permissions": ["activeTab"]
+  "permissions": ["activeTab"],
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  }
 }
