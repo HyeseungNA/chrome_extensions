@@ -9,17 +9,31 @@ document.addEventListener("DOMContentLoaded", function () {
   startButton.addEventListener("click", function () {
     if (startButton.innerText === "재생") {
       startButton.innerText = "일시정지";
-      chrome.runtime.sendMessage({
-        type: "updateTimer",
-        payload: {
-          hours: hoursInput.value,
-          minutes: minutesInput.value,
-          seconds: secondsInput.value,
+      chrome.runtime.sendMessage(
+        {
+          type: "updateTimer",
+          payload: {
+            hours: hoursInput.value,
+            minutes: minutesInput.value,
+            seconds: secondsInput.value,
+            startButton: startButton.innerText,
+          },
         },
-      });
+        (response) => {
+          console.log(response.res);
+        }
+      );
     } else {
       startButton.innerText = "재생";
     }
+  });
+
+  // 버튼 업데이트
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.type === "startUpdate") {
+      console.log("000");
+    }
+    console.log(request.payload.message);
   });
 
   resetButton.addEventListener("click", function () {
@@ -28,17 +42,4 @@ document.addEventListener("DOMContentLoaded", function () {
     minutesInput.value = "00";
     secondsInput.value = "00";
   });
-
-  // background.js에서 받은 타이머 값을 화면에 업데이트
-  // chrome.runtime.onMessage.addListener(function (
-  //   request,
-  //   sender,
-  //   sendResponse
-  // ) {
-  //   if (request.action === "updateTimerValues") {
-  //     hoursInput.value = request.hours;
-  //     minutesInput.value = request.minutes;
-  //     secondsInput.value = request.seconds;
-  //   }
-  // });
 });

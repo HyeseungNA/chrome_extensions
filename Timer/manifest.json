@@ -10,7 +10,6 @@
   "host_permissions": ["https://*.www.acmicpc.net/"],
   "permissions": ["activeTab"],
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js"
   }
 }
