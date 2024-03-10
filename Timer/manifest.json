@@ -7,9 +7,16 @@
     "default_popup": "popup.html",
     "default_icon": "timer.png"
   },
-  "host_permissions": ["https://*.www.acmicpc.net/"],
-  "permissions": ["activeTab"],
+  "host_permissions": ["https://*/*"],
+  "permissions": ["activeTab", "tabs", "scripting"],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.acmicpc.net/"],
+      "js": ["content-script.js"],
+      "runAt": "document_end"
+    }
+  ]
 }
