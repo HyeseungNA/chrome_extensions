@@ -58,17 +58,25 @@
 //   });
 // });
 
+function myFunction() {
+  alert("안녕");
+}
+
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-  if (changeInfo.status === "complete") {
-    console.log(tabId);
+  if (changeInfo.status === "complete" && tab.url.includes("problem/")) {
+    console.log(tab);
     tabId = tabId;
     chrome.scripting
       .executeScript({
         target: { tabId: tabId },
-        func: () => {
-          console.log("성공");
-        },
+        func: myFunction,
       })
-      .then(() => console.log("injected a function"));
+      .then(() => {
+        console.log("에에에");
+      });
+    //   if (tab.url.includes("problem")) {
+    //     alert("안녕~~~");
+    //   }
+    // });
   }
 });
