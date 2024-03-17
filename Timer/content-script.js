@@ -1,4 +1,5 @@
 // 콜론을 생성하는 함수
+
 const createColon = () => {
   let colon = document.createElement("span");
   colon.style.fontSize = "20px";
@@ -14,7 +15,7 @@ const createButton = (width, height, text) => {
 
   return button;
 };
-
+let timeInterval;
 const decreaseTime = (hour, minute, second) => {
   let hourInput = parseInt(hour.value);
   let minuteInput = parseInt(minute.value);
@@ -33,7 +34,7 @@ const decreaseTime = (hour, minute, second) => {
     }
   }
   if (hourInput === 0 && minuteInput === 0 && secondInput === 0) {
-    clearInterval(decreaseTime);
+    clearInterval(timeInterval);
   }
   hour.value = hourInput < 10 ? "0" + hourInput : hourInput;
   minute.value = minuteInput < 10 ? "0" + minuteInput : minuteInput;
@@ -45,22 +46,50 @@ const changeText = () => {
     startBtn.textContent = "Stop";
   } else {
     startBtn.textContent = "Start";
+    clearInterval(timeInterval);
   }
 };
-const changeButton = () => {
-  if (startBtn.textContent === "Start") {
-    setInterval(() => decreaseTime(hour, minute, second), 1000);
-  }
+
+// 타이머 시간
+const changeTimer = () => {
   changeText();
+  console.log(startBtn.textContent);
+  if (startBtn.textContent === "Stop") {
+    timeInterval = setInterval(() => decreaseTime(hour, minute, second), 1000);
+  } else {
+    clearInterval(decreaseTime);
+  }
+};
+const resetTimer = (hour, minute, second) => {
+  console.log(hour.value);
+  hour.value = "00";
+  minute.value = "00";
+  second.value = "00";
+  clearInterval(timeInterval);
+};
+const handleInput = (input, Min, Max) => {
+  input.addEventListener("input", (e) => {
+    let value = parseInt(e.target.value);
+    if (!isNaN(value) && value >= Min && value <= Max) {
+      // 입력 값이 유효한 범위 내에 있으면서 숫자일 경우
+      e.target.value = value < 10 ? "0" + value : String(value);
+    } else {
+      // 입력 값이 유효한 범위 내에 없거나 숫자가 아닌 경우
+      e.target.value = "00";
+    }
+  });
 };
 
 // input 요소를 생성하는 함수
-const createInput = (width, height, value) => {
+const createInput = (width, height, value, Min, Max) => {
   let input = document.createElement("input");
   input.style.width = width;
   input.style.height = height;
   input.value = value;
   input.type = "number";
+  input.min = Min;
+  input.max = Max;
+  handleInput(input, Min, Max);
   return input;
 };
 
@@ -86,12 +115,11 @@ timerContainer.append(inputContainer);
 inputContainer.style.flexDirection = "row";
 inputContainer.style.marginTop = "10px";
 
-let hour = createInput("40px", "20", "00");
-
+let hour = createInput("40px", "20", "00", 0, 23);
 let colon1 = createColon();
-let minute = createInput("40px", "20", "00");
+let minute = createInput("40px", "20", "00", 0, 59);
 let colon2 = createColon();
-let second = createInput("40px", "20", "00");
+let second = createInput("40px", "20", "00", 0, 59);
 
 inputContainer.appendChild(hour);
 inputContainer.appendChild(colon1);
@@ -108,7 +136,7 @@ buttonContainer.style.marginTop = "10px";
 let startBtn = createButton("40px", "25px", "Start"); // 시작 버튼 생성
 let resetBtn = createButton("40px", "25px", "Reset"); // 리셋 버튼 생성
 
-startBtn.addEventListener("click", changeButton);
-
+startBtn.addEventListener("click", () => changeTimer());
+resetBtn.addEventListener("click", () => resetTimer(hour, minute, second));
 buttonContainer.appendChild(startBtn);
 buttonContainer.appendChild(resetBtn);
