@@ -109,6 +109,17 @@ timerContainer.style.display = "flex";
 timerContainer.style.flexDirection = "column";
 timerContainer.style.alignItems = "center";
 
+const box = body.querySelector(".wrapper");
+
+// 드래그 속성 마우스를 클릭할 때 드래그 가능하게 만들기
+timerContainer.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  originX = e.clientX;
+  originY = e.clientY;
+  originLeft = box.offsetLeft;
+  originTop = box.offsetTop;
+});
+
 // input 박스 생성
 let inputContainer = document.createElement("div");
 timerContainer.append(inputContainer);
