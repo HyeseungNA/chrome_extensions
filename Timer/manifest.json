@@ -10,13 +10,13 @@
     "128": "128.png"
   },
   "host_permissions": ["https://*/*"],
-  "permissions": ["activeTab", "tabs", "scripting"],
+  "permissions": ["tabs", "scripting"],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["https://www.acmicpc.net/"],
+      "matches": ["*://*/academic/problem/*"],
       "js": ["content-script.js"],
       "runAt": "document_end"
     }

@@ -94,6 +94,8 @@ const createInput = (width, height, value, Min, Max) => {
 };
 
 // 타이머 박스 생성
+const container = document.querySelector(".wrapper");
+const content = document.querySelector(".container.content");
 let timerContainer = document.createElement("div");
 timerContainer.style.width = "200px";
 timerContainer.style.height = "100px";
@@ -103,13 +105,19 @@ timerContainer.style.backgroundColor = "grey";
 timerContainer.style.position = "absolute";
 timerContainer.style.zIndex = "9999";
 timerContainer.style.position = "fixed";
-const container = document.querySelector(".wrapper");
+
 container.prepend(timerContainer);
 timerContainer.style.display = "flex";
 timerContainer.style.flexDirection = "column";
 timerContainer.style.alignItems = "center";
 
 let isDragging = false;
+const { width: containerWidth, height: containerHeight } =
+  container.getBoundingClientRect();
+const { width: timerWidth, height: timerHeight } =
+  timerContainer.getBoundingClientRect();
+const { width: contentWidth, height: contentHeight } =
+  content.getBoundingClientRect();
 // 드래그 속성 마우스를 클릭할 때 드래그 가능하게 만들기
 timerContainer.addEventListener("mousedown", (e) => {
   isDragging = true;
@@ -117,17 +125,25 @@ timerContainer.addEventListener("mousedown", (e) => {
   originY = e.clientY;
   originLeft = timerContainer.offsetLeft;
   originTop = timerContainer.offsetTop;
-  console.log(originX);
 });
 
 document.addEventListener("mousemove", (e) => {
   if (isDragging) {
-    console.log(e.clientX);
-    console.log(originX, "-");
     const diffX = originX - e.clientX;
     const diffy = e.clientY - originY;
-    timerContainer.style.left = originLeft - diffX + "px";
-    timerContainer.style.top = originTop + diffy + "px";
+    const endOfXpoint = containerWidth - timerWidth;
+    const endOfYponint = 734;
+
+    timerContainer.style.left = `${Math.min(
+      Math.max(0, originLeft - diffX),
+      endOfXpoint
+    )}px`;
+    timerContainer.style.top = `${Math.min(
+      Math.max(0, originTop + diffy),
+      endOfYponint
+    )}px`;
+    console.log(endOfYponint);
+    console.log(originTop + diffy, "😕");
   }
 });
 
