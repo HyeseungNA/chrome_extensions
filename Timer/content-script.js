@@ -103,21 +103,36 @@ timerContainer.style.backgroundColor = "grey";
 timerContainer.style.position = "absolute";
 timerContainer.style.zIndex = "9999";
 timerContainer.style.position = "fixed";
-let container = document.querySelector(".wrapper");
+const container = document.querySelector(".wrapper");
 container.prepend(timerContainer);
 timerContainer.style.display = "flex";
 timerContainer.style.flexDirection = "column";
 timerContainer.style.alignItems = "center";
 
-const box = body.querySelector(".wrapper");
-
+let isDragging = false;
 // 드래그 속성 마우스를 클릭할 때 드래그 가능하게 만들기
 timerContainer.addEventListener("mousedown", (e) => {
   isDragging = true;
   originX = e.clientX;
   originY = e.clientY;
-  originLeft = box.offsetLeft;
-  originTop = box.offsetTop;
+  originLeft = timerContainer.offsetLeft;
+  originTop = timerContainer.offsetTop;
+  console.log(originX);
+});
+
+document.addEventListener("mousemove", (e) => {
+  if (isDragging) {
+    console.log(e.clientX);
+    console.log(originX, "-");
+    const diffX = originX - e.clientX;
+    const diffy = e.clientY - originY;
+    timerContainer.style.left = originLeft - diffX + "px";
+    timerContainer.style.top = originTop + diffy + "px";
+  }
+});
+
+document.addEventListener("mouseup", (e) => {
+  isDragging = false;
 });
 
 // input 박스 생성
