@@ -1,5 +1,7 @@
+document.addEventListener("DOMContentLoaded", (event) => {
+  console.log("DOM fully loaded and parsed");
+});
 // 콜론을 생성하는 함수
-
 const createColon = () => {
   let colon = document.createElement("span");
   colon.style.fontSize = "20px";
@@ -7,14 +9,15 @@ const createColon = () => {
   return colon;
 };
 
+// 버튼 생성하는 함수
 const createButton = (width, height, text) => {
   let button = document.createElement("button");
   button.style.width = width;
   button.style.height = height;
   button.textContent = text;
-
   return button;
 };
+
 let timeInterval;
 const decreaseTime = (hour, minute, second) => {
   let hourInput = parseInt(hour.value);
@@ -30,15 +33,24 @@ const decreaseTime = (hour, minute, second) => {
     } else {
       if (hourInput > 0) {
         hourInput -= 1;
+        minuteInput = 59;
+        secondInput = 59;
+      } else {
+        clearInterval(timeInterval);
       }
     }
-  }
-  if (hourInput === 0 && minuteInput === 0 && secondInput === 0) {
-    clearInterval(timeInterval);
   }
   hour.value = hourInput < 10 ? "0" + hourInput : hourInput;
   minute.value = minuteInput < 10 ? "0" + minuteInput : minuteInput;
   second.value = secondInput < 10 ? "0" + secondInput : secondInput;
+
+  // 1초마다 로컬 스토리지에 값 업데이트
+  let timerInfo = {
+    hour: hour.value,
+    minute: minute.value,
+    second: second.value,
+  };
+  localStorage.setItem("timerInfo", JSON.stringify(timerInfo)); // 수정
 };
 
 const changeText = () => {
@@ -52,9 +64,15 @@ const changeText = () => {
 
 // 타이머 시간
 const changeTimer = () => {
+  let timerInfo = {
+    hour: hour.value,
+    minute: minute.value,
+    second: second.value,
+  };
   changeText();
-  console.log(startBtn.textContent);
   if (startBtn.textContent === "Stop") {
+    localStorage.setItem("timerInfo", JSON.stringify(timerInfo));
+
     timeInterval = setInterval(() => decreaseTime(hour, minute, second), 1000);
   } else {
     clearInterval(decreaseTime);
@@ -111,6 +129,7 @@ timerContainer.style.display = "flex";
 timerContainer.style.flexDirection = "column";
 timerContainer.style.alignItems = "center";
 
+// 드래그 기능
 let isDragging = false;
 const { width: containerWidth, height: containerHeight } =
   container.getBoundingClientRect();
@@ -127,6 +146,7 @@ timerContainer.addEventListener("mousedown", (e) => {
   originTop = timerContainer.offsetTop;
 });
 
+// 마우스를 움직 일 때 드래그 시작
 document.addEventListener("mousemove", (e) => {
   if (isDragging) {
     const diffX = originX - e.clientX;
@@ -142,11 +162,10 @@ document.addEventListener("mousemove", (e) => {
       Math.max(0, originTop + diffy),
       endOfYponint
     )}px`;
-    console.log(endOfYponint);
-    console.log(originTop + diffy, "😕");
   }
 });
 
+// 마우스를 떼면 드래그 끝
 document.addEventListener("mouseup", (e) => {
   isDragging = false;
 });
@@ -169,6 +188,7 @@ inputContainer.appendChild(minute);
 inputContainer.appendChild(colon2);
 inputContainer.appendChild(second);
 
+// 타이머 버튼
 let buttonContainer = document.createElement("div");
 timerContainer.appendChild(buttonContainer);
 buttonContainer.style.display = "flex";

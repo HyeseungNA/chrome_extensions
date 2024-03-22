@@ -10,7 +10,7 @@
     "128": "128.png"
   },
   "host_permissions": ["https://*/*"],
-  "permissions": ["tabs", "scripting"],
+  "permissions": ["tabs", "scripting", "storage"],
   "background": {
     "service_worker": "background.js"
   },
@@ -18,7 +18,7 @@
     {
       "matches": ["*://*/academic/problem/*"],
       "js": ["content-script.js"],
-      "runAt": "document_end"
+      "runAt": "document_start"
     }
   ]
 }
