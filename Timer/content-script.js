@@ -1,6 +1,3 @@
-document.addEventListener("DOMContentLoaded", (event) => {
-  console.log("DOM fully loaded and parsed");
-});
 // 콜론을 생성하는 함수
 const createColon = () => {
   let colon = document.createElement("span");
@@ -46,11 +43,11 @@ const decreaseTime = (hour, minute, second) => {
 
   // 1초마다 로컬 스토리지에 값 업데이트
   let timerInfo = {
-    hour: hour.value,
-    minute: minute.value,
-    second: second.value,
+    hourInfo: hour.value,
+    minuteInfo: minute.value,
+    secondInfo: second.value,
   };
-  localStorage.setItem("timerInfo", JSON.stringify(timerInfo)); // 수정
+  sessionStorage.setItem("timerInfo", JSON.stringify(timerInfo)); // 수정
 };
 
 const changeText = () => {
@@ -63,15 +60,15 @@ const changeText = () => {
 };
 
 // 타이머 시간
-const changeTimer = () => {
+const changeTimer = (hour, minute, second) => {
   let timerInfo = {
-    hour: hour.value,
-    minute: minute.value,
-    second: second.value,
+    hourInfo: hour.value,
+    minuteInfo: minute.value,
+    secondInfo: second.value,
   };
   changeText();
   if (startBtn.textContent === "Stop") {
-    localStorage.setItem("timerInfo", JSON.stringify(timerInfo));
+    sessionStorage.setItem("timerInfo", JSON.stringify(timerInfo));
 
     timeInterval = setInterval(() => decreaseTime(hour, minute, second), 1000);
   } else {
@@ -79,11 +76,11 @@ const changeTimer = () => {
   }
 };
 const resetTimer = (hour, minute, second) => {
-  console.log(hour.value);
   hour.value = "00";
   minute.value = "00";
   second.value = "00";
   clearInterval(timeInterval);
+  localStorage.removeItem("timerInfo");
 };
 const handleInput = (input, Min, Max) => {
   input.addEventListener("input", (e) => {
@@ -198,7 +195,19 @@ buttonContainer.style.marginTop = "10px";
 let startBtn = createButton("40px", "25px", "Start"); // 시작 버튼 생성
 let resetBtn = createButton("40px", "25px", "Reset"); // 리셋 버튼 생성
 
-startBtn.addEventListener("click", () => changeTimer());
+startBtn.addEventListener("click", () => changeTimer(hour, minute, second));
 resetBtn.addEventListener("click", () => resetTimer(hour, minute, second));
 buttonContainer.appendChild(startBtn);
 buttonContainer.appendChild(resetBtn);
+
+const check = () => {
+  let timerInfo = JSON.parse(sessionStorage.getItem("timerInfo"));
+  if (timerInfo) {
+    hour.value = timerInfo.hourInfo;
+    minute.value = timerInfo.minuteInfo;
+    second.value = timerInfo.secondInfo;
+    changeTimer(hour, minute, second);
+  }
+};
+
+check();
