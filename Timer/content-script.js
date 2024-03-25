@@ -1,17 +1,25 @@
 // 콜론을 생성하는 함수
 const createColon = () => {
   let colon = document.createElement("span");
-  colon.style.fontSize = "20px";
+  colon.style.fontSize = "30px";
   colon.textContent = ":";
+  colon.style.color = "white";
   return colon;
 };
 
 // 버튼 생성하는 함수
 const createButton = (width, height, text) => {
   let button = document.createElement("button");
+  if (text === "Start") {
+    button.style.background = "#26A444";
+  } else {
+    button.style.background = "#565656";
+  }
+
   button.style.width = width;
   button.style.height = height;
   button.textContent = text;
+  button.style.color = "white";
   return button;
 };
 
@@ -52,9 +60,18 @@ const decreaseTime = (hour, minute, second) => {
 
 const changeText = () => {
   if (startBtn.textContent === "Start") {
+    startBtn.style.background = "#26A444";
     startBtn.textContent = "Stop";
+    hour.readOnly = true;
+    minute.readOnly = true;
+    second.readOnly = true;
   } else {
+    startBtn.style.background = "#B53264";
     startBtn.textContent = "Start";
+    hour.readOnly = false;
+    minute.readOnly = false;
+    second.readOnly = false;
+
     clearInterval(timeInterval);
   }
 };
@@ -100,11 +117,17 @@ const createInput = (width, height, value, Min, Max) => {
   let input = document.createElement("input");
   input.style.width = width;
   input.style.height = height;
+  input.style.fontWeight = "bold";
+  input.style.fontSize = "30px";
+  input.style.color = "white";
   input.value = value;
-  input.type = "number";
   input.min = Min;
   input.max = Max;
   handleInput(input, Min, Max);
+
+  input.style.border = "none";
+  input.style.background = "none";
+  input.style.textAlign = "center";
   return input;
 };
 
@@ -116,7 +139,7 @@ timerContainer.style.width = "200px";
 timerContainer.style.height = "100px";
 timerContainer.style.right = 0;
 timerContainer.style.border = "2px solid black";
-timerContainer.style.backgroundColor = "grey";
+timerContainer.style.backgroundColor = "#292929";
 timerContainer.style.position = "absolute";
 timerContainer.style.zIndex = "9999";
 timerContainer.style.position = "fixed";
@@ -170,6 +193,9 @@ document.addEventListener("mouseup", (e) => {
 // input 박스 생성
 let inputContainer = document.createElement("div");
 timerContainer.append(inputContainer);
+
+inputContainer.style.display = "flex";
+inputContainer.style.alignItems = "center";
 inputContainer.style.flexDirection = "row";
 inputContainer.style.marginTop = "10px";
 
@@ -191,9 +217,10 @@ timerContainer.appendChild(buttonContainer);
 buttonContainer.style.display = "flex";
 buttonContainer.style.flexDirection = "row";
 buttonContainer.style.marginTop = "10px";
-
-let startBtn = createButton("40px", "25px", "Start"); // 시작 버튼 생성
-let resetBtn = createButton("40px", "25px", "Reset"); // 리셋 버튼 생성
+buttonContainer.style.width = "140px";
+buttonContainer.style.justifyContent = "space-around";
+let startBtn = createButton("60px", "25px", "Start"); // 시작 버튼 생성
+let resetBtn = createButton("60px", "25px", "Reset"); // 리셋 버튼 생성
 
 startBtn.addEventListener("click", () => changeTimer(hour, minute, second));
 resetBtn.addEventListener("click", () => resetTimer(hour, minute, second));
