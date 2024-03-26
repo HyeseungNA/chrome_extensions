@@ -60,13 +60,13 @@ const decreaseTime = (hour, minute, second) => {
 
 const changeText = () => {
   if (startBtn.textContent === "Start") {
-    startBtn.style.background = "#26A444";
+    startBtn.style.background = "#B23262";
     startBtn.textContent = "Stop";
     hour.readOnly = true;
     minute.readOnly = true;
     second.readOnly = true;
   } else {
-    startBtn.style.background = "#B53264";
+    startBtn.style.background = "#26A444";
     startBtn.textContent = "Start";
     hour.readOnly = false;
     minute.readOnly = false;
@@ -83,7 +83,6 @@ const changeTimer = (hour, minute, second) => {
     minuteInfo: minute.value,
     secondInfo: second.value,
   };
-  changeText();
   if (startBtn.textContent === "Stop") {
     sessionStorage.setItem("timerInfo", JSON.stringify(timerInfo));
 
@@ -222,7 +221,10 @@ buttonContainer.style.justifyContent = "space-around";
 let startBtn = createButton("60px", "25px", "Start"); // 시작 버튼 생성
 let resetBtn = createButton("60px", "25px", "Reset"); // 리셋 버튼 생성
 
-startBtn.addEventListener("click", () => changeTimer(hour, minute, second));
+startBtn.addEventListener("click", () => {
+  changeText(); // changeText 함수 호출
+  changeTimer(hour, minute, second); // changeTimer 함수 호출
+});
 resetBtn.addEventListener("click", () => resetTimer(hour, minute, second));
 buttonContainer.appendChild(startBtn);
 buttonContainer.appendChild(resetBtn);
@@ -233,6 +235,7 @@ const check = () => {
     hour.value = timerInfo.hourInfo;
     minute.value = timerInfo.minuteInfo;
     second.value = timerInfo.secondInfo;
+    console.log(timerInfo);
     changeTimer(hour, minute, second);
   }
 };

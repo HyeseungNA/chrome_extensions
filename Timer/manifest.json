@@ -10,7 +10,7 @@
     "128": "128.png"
   },
   "host_permissions": ["https://*/*"],
-  "permissions": ["tabs", "scripting", "storage"],
+  "permissions": ["activeTab", "scripting", "storage"],
   "background": {
     "service_worker": "background.js"
   },
